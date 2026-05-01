@@ -1,0 +1,106 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+pythonenv*
+
+# Virtual Environment
+backend/venv/
+backend/env/
+backend/.venv/
+frontend/node_modules/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.vscode/
+.settings/
+
+# Project specific
+backend/.cache/
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.mypy_cache/
+.ruff_cache/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Uploads
+backend/uploads/
+backend/temp/
+
+# PDF exports (тестовые файлы)
+*.pdf
+!requirements.txt  # исключение: requirements.txt не игнорируем
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# React / Node
+frontend/dist/
+frontend/build/
+frontend/.cache/
+node_modules/
+*.tsbuildinfo
+
+# WSL / Windows specific
+Thumbs.db
+desktop.ini
+*.exe
+*.dll
+
+# Cache files
+.cache/
+*.egg-info/
+*.egg
+.python-version
+
+# Secrets / keys
+*.key
+*.pem
+*.crt
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+*.Trash
