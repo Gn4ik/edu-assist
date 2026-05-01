@@ -1,0 +1,276 @@
+# API Contract
+
+**Base URL:** http://localhost:8000/api  
+**Все запросы/ответы:** `application/json` (кроме `/upload/file` и `/export/pdf`)  
+**Кодировка:** UTF-8
+
+---
+
+## 1. Health Check
+
+### `GET /health`
+
+Проверка доступности сервера и LLM.
+
+**Response (200 OK):**
+```json
+{
+  "status": "ok",
+  "llm": "connected",
+  "model": "lakomoor/vikhr-llama-3.2-1b-instruct:1b",
+  "timestamp": "2026-04-30T18:30:00Z"
+}
+```
+
+**Response (503) — если Ollama не отвечает:**
+```json
+{
+  "status": "error",
+  "llm": "disconnected",
+  "error": "Ollama service not responding"
+}
+```
+
+---
+
+## 2. Загрузка файла
+
+### `POST /upload/file`
+`Content-Type: multipart/form-data`
+
+**Параметры:**
+| Поле | Тип | Обязательный | Описание |
+|------|-----|--------------|----------|
+| file | File | Да | .txt, .pdf, .docx, ≤10 MB |
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "filename": "лекция.pdf",
+  "text": "Извлечённый текст документа...",
+  "char_count": 4520,
+  "pages": 3
+}
+```
+
+**Errors:**
+- 400 — файл пустой
+- 413 — файл >10 MB
+- 415 — неподдерживаемый формат
+- 422 — PDF защищён или битый
+
+---
+
+## 3. Генерация конспекта
+
+### `POST /summary`
+
+**Request body (один из вариантов):**
+
+Вариант А: из текста
+```json
+{
+  "text": "Исходный текст для конспекта...",
+  "language": "ru",
+  "max_points": 7
+}
+```
+
+Вариант Б: без источника (по теме)
+```json
+{
+  "topic": "Квантовая физика для начинающих",
+  "language": "ru",
+  "max_points": 7
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "summary": "• Пункт 1\n• Пункт 2\n• Пункт 3",
+  "from_cache": false,
+  "processing_time_ms": 1240,
+  "tokens_used": 450,
+  "source_type": "text"
+}
+```
+
+---
+
+## 4. Генерация карточек
+
+### `POST /flashcards`
+
+**Request body:**
+```json
+{
+  "text": "Текст для генерации карточек...",
+  "language": "ru",
+  "num_cards": 5
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "flashcards": [
+    {
+      "front": "Что такое ИИ?",
+      "back": "Область информатики..."
+    },
+    {
+      "front": "Машинное обучение",
+      "back": "Подполе ИИ..."
+    }
+  ],
+  "from_cache": false,
+  "processing_time_ms": 890,
+  "tokens_used": 320
+}
+```
+
+**Error (если LLM выдал битый JSON):**
+```json
+{
+  "success": false,
+  "error": "Failed to generate valid flashcards",
+  "code": "LLM_FORMAT_ERROR"
+}
+```
+
+---
+
+## 5. Генерация тестов
+
+### `POST /quiz`
+
+**Request body:**
+```json
+{
+  "text": "Текст для генерации тестов...",
+  "num_questions": 5,
+  "language": "ru"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "quiz": [
+    {
+      "question": "Вопрос 1?",
+      "options": ["Вариант A", "Вариант B", "Вариант C", "Вариант D"],
+      "correct": 0
+    },
+    {
+      "question": "Вопрос 2?",
+      "options": ["A", "B", "C", "D"],
+      "correct": 2
+    }
+  ],
+  "from_cache": false,
+  "processing_time_ms": 2100,
+  "tokens_used": 580
+}
+```
+
+**Примечание:** correct — индекс правильного ответа (0-3)
+
+---
+
+## 6. Экспорт в PDF
+
+### `POST /export/pdf`
+
+**Request body:**
+```json
+{
+  "title": "Конспект: Искусственный интеллект",
+  "content": "Текст конспекта в формате plain text",
+  "author": "Учебный ассистент"
+}
+```
+
+**Response (200 OK):**
+`Content-Type: application/pdf`
+`Content-Disposition: attachment; filename="summary_20260430_183000.pdf"`
+
+[бинарные данные PDF]
+
+---
+
+## 7. Очистка кэша (опционально)
+
+### `DELETE /cache/{type}`
+
+**Path parameter:** type = all | summary | flashcards | quiz
+
+**Response (200 OK):**
+```json
+{
+  "success": true,
+  "cleared": "summary, flashcards, quiz",
+  "keys_removed": 42
+}
+```
+
+---
+
+## Формат ошибок (единый стандарт)
+```json
+{
+  "success": false,
+  "error": "Человекочитаемое описание",
+  "code": "MACHINE_READABLE_CODE",
+  "details": {}
+}
+```
+
+**Коды ошибок:**
+
+| Code | Описание |
+|------|----------|
+| MISSING_INPUT | Нет ни text, ни topic |
+| UNSUPPORTED_FORMAT | Неподдерживаемый тип файла |
+| FILE_TOO_LARGE | Файл >10 MB |
+| LLM_TIMEOUT | Ollama не ответил за 60 сек |
+| LLM_FORMAT_ERROR | Некорректный JSON от модели |
+| INCOMPLETE_RESULT | Модель вернула меньше элементов |
+| CACHE_ERROR | Проблема с кэшем |
+
+---
+
+## Сводная таблица эндпоинтов
+
+| Method | Endpoint | Request | Response |
+|--------|----------|---------|----------|
+| GET | /health | — | статус |
+| POST | /upload/file | multipart | текст из файла |
+| POST | /summary | {text/topic} | {summary} |
+| POST | /flashcards | {text, num_cards} | {flashcards[]} |
+| POST | /quiz | {text, num_questions} | {quiz[]} |
+| POST | /export/pdf | {title, content} | PDF file |
+| DELETE | /cache/{type} | — | статистика очистки |
+
+---
+
+## Примеры полного workflow
+
+### Сценарий 1: Загрузка файла → Конспект
+
+1. `POST /upload/file` (form-data) → { text: "...", ... }
+2. `POST /summary` { "text": "..." } → { summary: "..." }
+
+### Сценарий 2: Тема без файла → Тесты
+
+1. `POST /quiz` { "topic": "Python основы", "num_questions": 5 } → { quiz: [...] }
+
+### Сценарий 3: Карточки → Переворот на фронте
+
+1. `POST /flashcards` { "text": "..." } → { flashcards: [...] }
+2. Фронт отображает каждую карточку с front/back
