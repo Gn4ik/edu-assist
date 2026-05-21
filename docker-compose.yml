@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    deploy:
+      resources:
+        limits:
+          memory: 6G
+
+  ollama-pull:
+    image: ollama/ollama:latest
+    entrypoint: ["sh", "-c", "sleep 3 && ollama pull llama3.2:3b && ollama pull gemma2:2b"]
+    depends_on:
+      - ollama
+    restart: "no"
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+      - OLLAMA_MODEL=llama3.2:3b
+      - OLLAMA_TIMEOUT=120
+      - DATABASE_URL=sqlite+aiosqlite:///./edu_assist.db
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY:-change-me-in-production}
+      - LOG_LEVEL=INFO
+      - DEBUG=false
+      - CORS_ORIGINS=["http://localhost:5173","http://localhost:3000"]
+    volumes:
+      - backend_data:/app/data
+      - backend_cache:/app/.cache
+    depends_on:
+      - ollama
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+
+volumes:
+  ollama_data:
+  backend_data:
+  backend_cache:
