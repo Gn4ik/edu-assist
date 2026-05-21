@@ -11,7 +11,7 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h2 className="result-header" style={{ marginTop: 0 }}>📊 Панель управления</h2>
+      <h2 className="result-header" style={{ marginTop: 0 }}>Панель управления</h2>
       <StatsWidget stats={stats} />
 
       {stats && (
@@ -27,7 +27,7 @@ export default function DashboardPage() {
               ))}
             </div>
             <div>
-              <h3 style={{ color: '#667eea', marginBottom: '1rem' }}>🤖 Использованные модели</h3>
+              <h3 style={{ color: '#667eea', marginBottom: '1rem' }}>Использованные модели</h3>
               {Object.entries(stats.models_used).map(([model, count]) => (
                 <div key={model} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
                   <span>{model}</span>

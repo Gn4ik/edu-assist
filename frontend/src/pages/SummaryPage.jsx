@@ -31,28 +31,25 @@ export default function SummaryPage() {
 
   return (
     <div>
-      <h2 className="result-header" style={{ marginTop: 0 }}>📝 Конспект</h2>
+      <h2 className="result-header" style={{ marginTop: 0 }}>Конспект</h2>
 
       <div className="input-section">
         <div className="modes">
           <button
             className={`mode-btn ${mode === 'text' ? 'active' : ''}`}
             onClick={() => setMode('text')}
-          >
-            <span className="mode-icon">📄</span> Из текста
+          > Из текста
           </button>
           <button
             className={`mode-btn ${mode === 'topic' ? 'active' : ''}`}
             onClick={() => setMode('topic')}
-          >
-            <span className="mode-icon">🏷️</span> По теме
+          > По теме
           </button>
         </div>
 
         {mode === 'text' ? (
           <>
             <div className="input-label">
-              <span className="label-icon">📖</span>
               <span>Вставьте текст для конспектирования</span>
             </div>
             <textarea
@@ -66,7 +63,6 @@ export default function SummaryPage() {
         ) : (
           <>
             <div className="input-label">
-              <span className="label-icon">🎯</span>
               <span>Введите тему</span>
             </div>
             <input
@@ -82,7 +78,6 @@ export default function SummaryPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
           <div>
             <div className="input-label">
-              <span className="label-icon">🌐</span>
               <span>Язык</span>
             </div>
             <select className="input-url" value={language} onChange={(e) => setLanguage(e.target.value)}>
@@ -95,7 +90,6 @@ export default function SummaryPage() {
           </div>
           <div>
             <div className="input-label">
-              <span className="label-icon">📊</span>
               <span>Макс. пунктов</span>
             </div>
             <div className="slider-container">
@@ -114,7 +108,6 @@ export default function SummaryPage() {
           </div>
           <div>
             <div className="input-label">
-              <span className="label-icon">🤖</span>
               <span>Модель</span>
             </div>
             <input
@@ -128,14 +121,14 @@ export default function SummaryPage() {
         </div>
 
         <button className="generate-btn" onClick={generate} disabled={loading}>
-          {loading ? <span className="spinner"></span> : '✨ Сгенерировать конспект'}
+          {loading ? <span className="spinner"></span> : 'Сгенерировать конспект'}
         </button>
       </div>
 
       {result && result.success && (
         <div className="results-section">
           <div className="result-header">
-            <h2>📋 Результат</h2>
+            <h2>Результат</h2>
             <button
               className="copy-btn"
               onClick={() => {
@@ -143,7 +136,7 @@ export default function SummaryPage() {
                 alert('Скопировано!')
               }}
             >
-              📋 Копировать
+              Копировать
             </button>
           </div>
           <div className="summary-content">
@@ -152,7 +145,7 @@ export default function SummaryPage() {
             </pre>
           </div>
           <div className="info-box" style={{ marginTop: '1rem' }}>
-            {result.from_cache ? '📦 Из кэша' : '✨ Новый'} | ⏱️ {result.processing_time_ms} мс
+            {result.from_cache ? 'Из кэша' : 'Новый'} | {result.processing_time_ms} мс
             {result.generation_id && ` | ID: ${result.generation_id}`}
           </div>
         </div>
@@ -160,7 +153,7 @@ export default function SummaryPage() {
 
       {result && !result.success && (
         <div className="info-box" style={{ backgroundColor: '#fee', color: '#c33' }}>
-          ❌ {result.error}
+          {result.error}
         </div>
       )}
     </div>

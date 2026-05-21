@@ -40,18 +40,6 @@ export default function HistoryPage() {
     fetchHistory()
   }
 
-  const getTypeIcon = (type) => {
-    const icons = {
-      summary: '📝',
-      flashcards: '🃏',
-      quiz: '❓',
-      keywords: '🔑',
-      simplify: '📖',
-      study_plan: '📅'
-    }
-    return icons[type] || '📄'
-  }
-
   const getTypeColor = (type) => {
     const colors = {
       summary: '#667eea',
@@ -66,13 +54,12 @@ export default function HistoryPage() {
 
   return (
     <div>
-      <h2 className="result-header" style={{ marginTop: 0 }}>📜 История генераций</h2>
+      <h2 className="result-header" style={{ marginTop: 0 }}>История генераций</h2>
 
       <div className="input-section" style={{ marginBottom: '1.5rem' }}>
         <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
           <div style={{ flex: 1 }}>
             <div className="input-label">
-              <span className="label-icon">🔍</span>
               <span>Фильтр по типу</span>
             </div>
             <select
@@ -81,18 +68,17 @@ export default function HistoryPage() {
               onChange={(e) => { setFilter(e.target.value); setPage(1) }}
             >
               <option value="">Все типы</option>
-              <option value="summary">📝 Конспект</option>
-              <option value="flashcards">🃏 Карточки</option>
-              <option value="quiz">❓ Тест</option>
-              <option value="keywords">🔑 Ключевые слова</option>
-              <option value="simplify">📖 Упрощение</option>
-              <option value="study_plan">📅 Учебный план</option>
+              <option value="summary">Конспект</option>
+              <option value="flashcards">Карточки</option>
+              <option value="quiz">Тест</option>
+              <option value="keywords">Ключевые слова</option>
+              <option value="simplify">Упрощение</option>
+              <option value="study_plan">Учебный план</option>
             </select>
           </div>
 
           <div style={{ flex: 2 }}>
             <div className="input-label">
-              <span className="label-icon">🔎</span>
               <span>Поиск по тексту</span>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
@@ -114,7 +100,7 @@ export default function HistoryPage() {
 
       {items.length === 0 ? (
         <div className="info-box" style={{ justifyContent: 'center' }}>
-          📭 История пуста. Сгенерируйте что-нибудь!
+          История пуста. Сгенерируйте что-нибудь!
         </div>
       ) : (
         <>
@@ -181,7 +167,6 @@ export default function HistoryPage() {
                           onClick={() => deleteItem(item.id)}
                           title="Удалить"
                         >
-                          🗑️
                         </button>
                       </div>
                     </td>
