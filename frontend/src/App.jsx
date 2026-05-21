@@ -23,14 +23,14 @@ export default function App() {
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
-              <Route path="/" element={<DashboardPage />} />
-              <Route path="/summary" element={<SummaryPage />} />
-              <Route path="/flashcards" element={<FlashcardsPage />} />
-              <Route path="/quiz" element={<QuizPage />} />
-              <Route path="/keywords" element={<KeywordsPage />} />
-              <Route path="/history" element={<HistoryPage />} />
-              <Route path="/favorites" element={<FavoritesPage />} />
-              <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
+              <Route path="/summary" element={<ProtectedRoute><SummaryPage /></ProtectedRoute>} />
+              <Route path="/flashcards" element={<ProtectedRoute><FlashcardsPage /></ProtectedRoute>} />
+              <Route path="/quiz" element={<ProtectedRoute><QuizPage /></ProtectedRoute>} />
+              <Route path="/keywords" element={<ProtectedRoute><KeywordsPage /></ProtectedRoute>} />
+              <Route path="/history" element={<ProtectedRoute><HistoryPage /></ProtectedRoute>} />
+              <Route path="/favorites" element={<ProtectedRoute><FavoritesPage /></ProtectedRoute>} />
+              <Route path="/settings" element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
             </Routes>
           </div>
         </div>
