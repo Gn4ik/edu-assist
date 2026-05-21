@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { Row, Col, Card } from 'react-bootstrap'
 import api from '../api/client'
 import StatsWidget from '../components/StatsWidget'
 
@@ -12,34 +11,32 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h2 className="mb-4">Панель</h2>
+      <h2 className="result-header" style={{ marginTop: 0 }}>📊 Панель управления</h2>
       <StatsWidget stats={stats} />
 
       {stats && (
-        <Row className="g-3">
-          <Col md={6}>
-            <Card className="p-3">
-              <h5>По типу</h5>
+        <div className="results-section" style={{ marginTop: '2rem' }}>
+          <div className="row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+            <div>
+              <h3 style={{ color: '#667eea', marginBottom: '1rem' }}>📈 По типу</h3>
               {Object.entries(stats.by_type).map(([type, count]) => (
-                <div key={type} className="d-flex justify-content-between">
+                <div key={type} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
                   <span>{type}</span>
                   <strong>{count}</strong>
                 </div>
               ))}
-            </Card>
-          </Col>
-          <Col md={6}>
-            <Card className="p-3">
-              <h5>Использованные модели</h5>
+            </div>
+            <div>
+              <h3 style={{ color: '#667eea', marginBottom: '1rem' }}>🤖 Использованные модели</h3>
               {Object.entries(stats.models_used).map(([model, count]) => (
-                <div key={model} className="d-flex justify-content-between">
+                <div key={model} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
                   <span>{model}</span>
                   <strong>{count}</strong>
                 </div>
               ))}
-            </Card>
-          </Col>
-        </Row>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

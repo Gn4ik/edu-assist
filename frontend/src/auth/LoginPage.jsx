@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from './useAuth'
-import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap'
 
 export default function LoginPage() {
   const [username, setUsername] = useState('')
@@ -26,42 +25,49 @@ export default function LoginPage() {
   }
 
   return (
-    <Container className="mt-5">
-      <Row className="justify-content-center">
-        <Col md={6} lg={4}>
-          <Card>
-            <Card.Body>
-              <h3 className="text-center mb-4">Вход в EduAssist</h3>
-              {error && <Alert variant="danger">{error}</Alert>}
-              <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Имя пользователя или Email</Form.Label>
-                  <Form.Control
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                  <Form.Label>Пароль</Form.Label>
-                  <Form.Control
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                </Form.Group>
-                <Button type="submit" variant="primary" className="w-100" disabled={loading}>
-                  {loading ? 'Вход...' : 'Войти'}
-                </Button>
-              </Form>
-              <p className="text-center mt-3">
-                Нет аккаунта? <Link to="/register">Регистрация</Link>
-              </p>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+    <div className="input-section" style={{ maxWidth: 500, margin: '0 auto' }}>
+      <h2 className="result-header" style={{ justifyContent: 'center', borderBottom: 'none' }}>
+        Вход в EduAssist
+      </h2>
+      {error && (
+        <div className="info-box" style={{ backgroundColor: '#fee', color: '#c33', marginBottom: '1rem' }}>
+          ⚠️ {error}
+        </div>
+      )}
+      <form onSubmit={handleSubmit}>
+        <div className="input-label">
+          <span className="label-icon">👤</span>
+          <span>Имя пользователя или Email</span>
+        </div>
+        <input
+          type="text"
+          className="input-textarea"
+          style={{ marginBottom: '1rem' }}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
+
+        <div className="input-label">
+          <span className="label-icon">🔒</span>
+          <span>Пароль</span>
+        </div>
+        <input
+          type="password"
+          className="input-textarea"
+          style={{ marginBottom: '1.5rem' }}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+
+        <button type="submit" className="generate-btn" disabled={loading}>
+          {loading ? <span className="spinner"></span> : 'Войти'}
+        </button>
+      </form>
+      <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--muted, #666)' }}>
+        Нет аккаунта? <Link to="/register" style={{ color: '#667eea' }}>Регистрация</Link>
+      </p>
+    </div>
   )
 }

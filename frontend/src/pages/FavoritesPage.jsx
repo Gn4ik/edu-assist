@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { Card, Table, Button, Badge } from 'react-bootstrap'
 import api from '../api/client'
 
 export default function FavoritesPage() {
@@ -12,47 +11,84 @@ export default function FavoritesPage() {
   useEffect(fetchFavorites, [])
 
   const remove = async (id) => {
-    await api.delete(`/api/favorites/${id}`)
-    fetchFavorites()
+    if (window.confirm('Удалить из избранного?')) {
+      await api.delete(`/api/favorites/${id}`)
+      fetchFavorites()
+    }
   }
 
-  const typeBadge = (type) => {
-    const colors = { summary: 'primary', flashcards: 'success', quiz: 'warning', keywords: 'info', simplify: 'secondary', study_plan: 'dark' }
-    return <Badge bg={colors[type] || 'secondary'}>{type}</Badge>
+  const getTypeIcon = (type) => {
+    const icons = {
+      summary: '📝',
+      flashcards: '🃏',
+      quiz: '❓',
+      keywords: '🔑',
+      simplify: '📖',
+      study_plan: '📅'
+    }
+    return icons[type] || '📄'
   }
 
   return (
     <div>
-      <h2 className="mb-4">Избранное</h2>
+      <h2 className="result-header" style={{ marginTop: 0 }}>⭐ Избранное</h2>
+
       {items.length === 0 ? (
-        <Card className="p-4 text-center text-muted">Пока нет избранных. Отмечайте элементы в Истории.</Card>
+        <div className="input-section" style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⭐</div>
+          <h3>Пока нет избранных</h3>
+          <p className="text-muted">Отмечайте понравившиеся генерации в истории, чтобы они появились здесь</p>
+        </div>
       ) : (
-        <Table striped hover responsive>
-          <thead>
-            <tr>
-              <th>Тип</th>
-              <th>Ввод</th>
-              <th>Модель</th>
-              <th>Добавлено</th>
-              <th>Действие</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.favorite_id}>
-                <td>{typeBadge(item.type)}</td>
-                <td className="text-truncate" style={{ maxWidth: 300 }}>{item.input_content}</td>
-                <td><small>{item.model_used}</small></td>
-                <td><small>{new Date(item.created_at).toLocaleDateString()}</small></td>
-                <td>
-                  <Button size="sm" variant="outline-danger" onClick={() => remove(item.favorite_id)}>
-                    Удалить
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+        <div style={{ display: 'grid', gap: '1rem' }}>
+          {items.map((item) => (
+            <div key={item.favorite_id} className="results-section">
+              <div className="result-header" style={{ marginBottom: '0.75rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                  <span style={{ fontSize: '1.5rem' }}>{getTypeIcon(item.type)}</span>
+                  <h3 style={{ margin: 0, color: '#667eea' }}>{item.type}</h3>
+                  <code style={{ fontSize: '0.85rem' }}>{item.model_used}</code>
+                </div>
+                <button
+                  className="copy-btn"
+                  style={{ background: '#ef4444' }}
+                  onClick={() => remove(item.favorite_id)}
+                >
+                  🗑️ Удалить
+                </button>
+              </div>
+              <div className="input-section" style={{ marginBottom: 0, padding: '1rem' }}>
+                <div className="input-label" style={{ marginBottom: '0.5rem' }}>
+                  <span className="label-icon">📥</span>
+                  <span>Входные данные</span>
+                </div>
+                <div className="info-box" style={{ marginBottom: '1rem' }}>
+                  {item.input_content}
+                </div>
+
+                {item.output && (
+                  <>
+                    <div className="input-label" style={{ marginBottom: '0.5rem' }}>
+                      <span className="label-icon">📤</span>
+                      <span>Результат</span>
+                    </div>
+                    <div className="info-box" style={{ marginBottom: 0, background: 'var(--bg, #f9f9f9)' }}>
+                      <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>
+                        {typeof item.output === 'string'
+                          ? item.output.substring(0, 200) + (item.output.length > 200 ? '...' : '')
+                          : JSON.stringify(item.output, null, 2).substring(0, 200)}
+                      </pre>
+                    </div>
+                  </>
+                )}
+
+                <div style={{ marginTop: '0.75rem', fontSize: '0.85rem', color: 'var(--muted, #666)' }}>
+                  Добавлено: {new Date(item.created_at).toLocaleDateString('ru-RU')}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
     </div>
   )

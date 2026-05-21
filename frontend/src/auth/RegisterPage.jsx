@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from './useAuth'
-import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap'
 
 export default function RegisterPage() {
   const [username, setUsername] = useState('')
@@ -27,53 +26,64 @@ export default function RegisterPage() {
   }
 
   return (
-    <Container className="mt-5">
-      <Row className="justify-content-center">
-        <Col md={6} lg={4}>
-          <Card>
-            <Card.Body>
-              <h3 className="text-center mb-4">Создать аккаунт</h3>
-              {error && <Alert variant="danger">{error}</Alert>}
-              <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3">
-                  <Form.Label>Имя пользователя</Form.Label>
-                  <Form.Control
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    minLength={3}
-                    required
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                  <Form.Label>Пароль (мин. 8 символов)</Form.Label>
-                  <Form.Control
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    minLength={8}
-                    required
-                  />
-                </Form.Group>
-                <Button type="submit" variant="primary" className="w-100" disabled={loading}>
-                  {loading ? 'Создание...' : 'Зарегистрироваться'}
-                </Button>
-              </Form>
-              <p className="text-center mt-3">
-                Уже есть аккаунт? <Link to="/login">Войти</Link>
-              </p>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
+    <div className="input-section" style={{ maxWidth: 500, margin: '0 auto' }}>
+      <h2 className="result-header" style={{ justifyContent: 'center', borderBottom: 'none' }}>
+        Создать аккаунт
+      </h2>
+      {error && (
+        <div className="info-box" style={{ backgroundColor: '#fee', color: '#c33', marginBottom: '1rem' }}>
+          ⚠️ {error}
+        </div>
+      )}
+      <form onSubmit={handleSubmit}>
+        <div className="input-label">
+          <span className="label-icon">👤</span>
+          <span>Имя пользователя (мин. 3 символа)</span>
+        </div>
+        <input
+          type="text"
+          className="input-textarea"
+          style={{ marginBottom: '1rem' }}
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          minLength={3}
+          required
+        />
+
+        <div className="input-label">
+          <span className="label-icon">📧</span>
+          <span>Email</span>
+        </div>
+        <input
+          type="email"
+          className="input-textarea"
+          style={{ marginBottom: '1rem' }}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+
+        <div className="input-label">
+          <span className="label-icon">🔒</span>
+          <span>Пароль (мин. 8 символов)</span>
+        </div>
+        <input
+          type="password"
+          className="input-textarea"
+          style={{ marginBottom: '1.5rem' }}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          minLength={8}
+          required
+        />
+
+        <button type="submit" className="generate-btn" disabled={loading}>
+          {loading ? <span className="spinner"></span> : 'Зарегистрироваться'}
+        </button>
+      </form>
+      <p style={{ textAlign: 'center', marginTop: '1.5rem', color: 'var(--muted, #666)' }}>
+        Уже есть аккаунт? <Link to="/login" style={{ color: '#667eea' }}>Войти</Link>
+      </p>
+    </div>
   )
 }
