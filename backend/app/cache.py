@@ -1,10 +1,12 @@
 import diskcache as dc
 
-from app.config import CACHE_DIR, CACHE_SIZE_MB
+from app.config import get_settings
+
+settings = get_settings()
 
 cache = dc.Cache(
-    directory=str(CACHE_DIR),
-    size_limit=CACHE_SIZE_MB * 1024 * 1024,
+    directory=str(settings.CACHE_DIR),
+    size_limit=settings.CACHE_SIZE_MB * 1024 * 1024,
     eviction_policy="least-recently-used",
 )
 
