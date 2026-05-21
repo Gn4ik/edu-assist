@@ -6,7 +6,7 @@ export default function Navbar() {
   const { user, logout } = useAuth()
   const location = useLocation()
 
-  //if (!user) return null
+  if (!user) return null
 
   const navItems = [
     { path: '/', label: 'Панель', icon: '📊' },
@@ -21,7 +21,7 @@ export default function Navbar() {
   return (
     <div className="header">
       <div className="header-content">
-        {/* <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
           <div>
             <h1>📚 EduAssist</h1>
             <p>AI-ассистент для обучения</p>
@@ -37,7 +37,7 @@ export default function Navbar() {
               🚪 Выйти
             </button>
           </div>
-        </div> */}
+        </div>
 
         <div className="modes" style={{ marginTop: '1.5rem', marginBottom: 0 }}>
           {navItems.map((item) => (
