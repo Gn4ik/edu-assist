@@ -32,12 +32,11 @@ export default function RegisterPage() {
       </h2>
       {error && (
         <div className="info-box" style={{ backgroundColor: '#fee', color: '#c33', marginBottom: '1rem' }}>
-          ⚠️ {error}
+          {error}
         </div>
       )}
       <form onSubmit={handleSubmit}>
         <div className="input-label">
-          <span className="label-icon">👤</span>
           <span>Имя пользователя (мин. 3 символа)</span>
         </div>
         <input
@@ -51,7 +50,6 @@ export default function RegisterPage() {
         />
 
         <div className="input-label">
-          <span className="label-icon">📧</span>
           <span>Email</span>
         </div>
         <input
@@ -64,7 +62,6 @@ export default function RegisterPage() {
         />
 
         <div className="input-label">
-          <span className="label-icon">🔒</span>
           <span>Пароль (мин. 8 символов)</span>
         </div>
         <input

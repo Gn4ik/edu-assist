@@ -9,13 +9,13 @@ export default function Navbar() {
   if (!user) return null
 
   const navItems = [
-    { path: '/', label: 'Панель', icon: '📊' },
-    { path: '/summary', label: 'Конспект', icon: '📝' },
-    { path: '/flashcards', label: 'Карточки', icon: '🃏' },
-    { path: '/quiz', label: 'Тест', icon: '❓' },
-    { path: '/keywords', label: 'Ключевые слова', icon: '🔑' },
-    { path: '/history', label: 'История', icon: '📜' },
-    { path: '/favorites', label: 'Избранное', icon: '⭐' },
+    { path: '/', label: 'Панель' },
+    { path: '/summary', label: 'Конспект' },
+    { path: '/flashcards', label: 'Карточки'},
+    { path: '/quiz', label: 'Тест'},
+    { path: '/keywords', label: 'Ключевые слова' },
+    { path: '/history', label: 'История'},
+    { path: '/favorites', label: 'Избранное' },
   ]
 
   return (
@@ -23,18 +23,18 @@ export default function Navbar() {
       <div className="header-content">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
           <div>
-            <h1>📚 EduAssist</h1>
+            <h1>EduAssist</h1>
             <p>AI-ассистент для обучения</p>
           </div>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
             <ThemeToggle />
             <Link to="/settings" style={{ textDecoration: 'none' }}>
               <div className="info-box" style={{ margin: 0, cursor: 'pointer' }}>
-                👤 {user.username}
+                {user.username}
               </div>
             </Link>
             <button className="copy-btn" onClick={logout} style={{ background: '#ef4444' }}>
-              🚪 Выйти
+              Выйти
             </button>
           </div>
         </div>
@@ -43,7 +43,7 @@ export default function Navbar() {
           {navItems.map((item) => (
             <Link key={item.path} to={item.path} style={{ textDecoration: 'none', flex: 1 }}>
               <div className={`mode-btn ${location.pathname === item.path ? 'active' : ''}`}>
-                <span className="mode-icon">{item.icon}</span> {item.label}
+                {item.label}
               </div>
             </Link>
           ))}

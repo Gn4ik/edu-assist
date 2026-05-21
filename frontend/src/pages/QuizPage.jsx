@@ -44,28 +44,25 @@ export default function QuizPage() {
 
   return (
     <div>
-      <h2 className="result-header" style={{ marginTop: 0 }}>❓ Генератор тестов</h2>
+      <h2 className="result-header" style={{ marginTop: 0 }}>Генератор тестов</h2>
 
       <div className="input-section">
         <div className="modes">
           <button
             className={`mode-btn ${mode === 'text' ? 'active' : ''}`}
             onClick={() => setMode('text')}
-          >
-            <span className="mode-icon">📄</span> Из текста
+          > Из текста
           </button>
           <button
             className={`mode-btn ${mode === 'topic' ? 'active' : ''}`}
             onClick={() => setMode('topic')}
-          >
-            <span className="mode-icon">🏷️</span> По теме
+          > По теме
           </button>
         </div>
 
         {mode === 'text' ? (
           <>
             <div className="input-label">
-              <span className="label-icon">📖</span>
               <span>Вставьте текст для создания теста</span>
             </div>
             <textarea
@@ -79,7 +76,6 @@ export default function QuizPage() {
         ) : (
           <>
             <div className="input-label">
-              <span className="label-icon">🎯</span>
               <span>Введите тему</span>
             </div>
             <input
@@ -95,7 +91,6 @@ export default function QuizPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
           <div>
             <div className="input-label">
-              <span className="label-icon">❓</span>
               <span>Кол-во вопросов</span>
             </div>
             <div className="slider-container">
@@ -115,7 +110,6 @@ export default function QuizPage() {
 
           <div>
             <div className="input-label">
-              <span className="label-icon">⚡</span>
               <span>Сложность</span>
             </div>
             <select className="input-url" value={difficulty} onChange={(e) => setDifficulty(e.target.value)}>
@@ -127,7 +121,6 @@ export default function QuizPage() {
 
           <div>
             <div className="input-label">
-              <span className="label-icon">🌐</span>
               <span>Язык</span>
             </div>
             <select className="input-url" value={language} onChange={(e) => setLanguage(e.target.value)}>
@@ -138,7 +131,6 @@ export default function QuizPage() {
 
           <div>
             <div className="input-label">
-              <span className="label-icon">🤖</span>
               <span>Модель</span>
             </div>
             <input
@@ -152,14 +144,14 @@ export default function QuizPage() {
         </div>
 
         <button className="generate-btn" onClick={generate} disabled={loading}>
-          {loading ? <span className="spinner"></span> : '✨ Сгенерировать тест'}
+          {loading ? <span className="spinner"></span> : 'Сгенерировать тест'}
         </button>
       </div>
 
       {quiz && (
         <div className="results-section">
           <div className="result-header">
-            <h2>📝 Ваш тест</h2>
+            <h2>Ваш тест</h2>
             <div className="info-box" style={{ margin: 0 }}>
               {getDifficultyIcon(difficulty)} {difficulty === 'easy' ? 'Лёгкий' : difficulty === 'medium' ? 'Средний' : 'Сложный'} | {numQuestions} вопросов
             </div>

@@ -38,7 +38,7 @@ export default function QuizRunner({ quiz }) {
             </div>
             {submitted && q.explanation && (
               <div className="explanation">
-                💡 {q.explanation}
+                {q.explanation}
               </div>
             )}
           </div>
@@ -52,16 +52,16 @@ export default function QuizRunner({ quiz }) {
           disabled={Object.keys(answers).length < quiz.length}
           onClick={() => setSubmitted(true)}
         >
-          ✅ Отправить ответы
+          Отправить ответы
         </button>
       )}
 
       {submitted && (
         <div className="results-section" style={{ marginTop: '1rem' }}>
           <div className="result-header">
-            <h3>📊 Результат: {score}/{quiz.length} ({Math.round((score / quiz.length) * 100)}%)</h3>
+            <h3>Результат: {score}/{quiz.length} ({Math.round((score / quiz.length) * 100)}%)</h3>
             <button className="copy-btn" onClick={() => { setAnswers({}); setSubmitted(false) }}>
-              🔄 Повторить
+              Повторить
             </button>
           </div>
           <div className="slider-container">

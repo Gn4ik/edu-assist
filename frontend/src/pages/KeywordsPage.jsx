@@ -27,11 +27,10 @@ export default function KeywordsPage() {
 
   return (
     <div>
-      <h2 className="result-header" style={{ marginTop: 0 }}>🔑 Извлечение ключевых слов</h2>
+      <h2 className="result-header" style={{ marginTop: 0 }}>Извлечение ключевых слов</h2>
 
       <div className="input-section">
         <div className="input-label">
-          <span className="label-icon">📖</span>
           <span>Вставьте текст для анализа</span>
         </div>
         <textarea
@@ -45,7 +44,6 @@ export default function KeywordsPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
           <div>
             <div className="input-label">
-              <span className="label-icon">🌐</span>
               <span>Язык</span>
             </div>
             <select className="input-url" value={language} onChange={(e) => setLanguage(e.target.value)}>
@@ -56,7 +54,6 @@ export default function KeywordsPage() {
 
           <div>
             <div className="input-label">
-              <span className="label-icon">🔢</span>
               <span>Макс. ключевых слов</span>
             </div>
             <div className="slider-container">
@@ -76,14 +73,14 @@ export default function KeywordsPage() {
         </div>
 
         <button className="generate-btn" onClick={generate} disabled={loading}>
-          {loading ? <span className="spinner"></span> : '🔍 Извлечь ключевые слова'}
+          {loading ? <span className="spinner"></span> : 'Извлечь ключевые слова'}
         </button>
       </div>
 
       {keywords && Array.isArray(keywords) && keywords.length > 0 && (
         <div className="results-section">
           <div className="result-header">
-            <h2>🏷️ Ключевые слова</h2>
+            <h2>Ключевые слова</h2>
             <div className="info-box" style={{ margin: 0 }}>
               Найдено: {keywords.length} слов
             </div>
