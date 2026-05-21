@@ -1,25 +1,22 @@
-import { Card, Row, Col } from 'react-bootstrap'
-
 export default function StatsWidget({ stats }) {
   if (!stats) return null
 
   const items = [
-    { label: 'Всего генераций', value: stats.total_generations },
-    { label: 'За неделю', value: stats.generations_last_7_days },
-    { label: 'Избранное', value: stats.total_favorites },
-    { label: 'Среднее время (мс)', value: stats.avg_processing_time_ms },
+    { label: 'Всего генераций', value: stats.total_generations, icon: '📝' },
+    { label: 'За неделю', value: stats.generations_last_7_days, icon: '📅' },
+    { label: 'Избранное', value: stats.total_favorites, icon: '⭐' },
+    { label: 'Среднее время (мс)', value: stats.avg_processing_time_ms, icon: '⚡' },
   ]
 
   return (
-    <Row className="g-3 mb-4">
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
       {items.map((item) => (
-        <Col key={item.label} xs={6} md={3}>
-          <Card className="text-center p-3">
-            <h2>{item.value}</h2>
-            <small className="text-muted">{item.label}</small>
-          </Card>
-        </Col>
+        <div key={item.label} className="results-section" style={{ textAlign: 'center', padding: '1.5rem' }}>
+          <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>{item.icon}</div>
+          <h2 style={{ fontSize: '2rem', margin: '0.5rem 0', color: '#667eea' }}>{item.value}</h2>
+          <small className="text-muted">{item.label}</small>
+        </div>
       ))}
-    </Row>
+    </div>
   )
 }

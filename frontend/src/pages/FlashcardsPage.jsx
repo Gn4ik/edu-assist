@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Card, Form, Button, Spinner, Tabs, Tab, Row, Col } from 'react-bootstrap'
 import api from '../api/client'
 import FlashcardFlip from '../components/FlashcardFlip'
 
@@ -35,55 +34,116 @@ export default function FlashcardsPage() {
 
   return (
     <div>
-      <h2 className="mb-4">Карточки</h2>
+      <h2 className="result-header" style={{ marginTop: 0 }}>🃏 Карточки для запоминания</h2>
 
-      <Card className="mb-3 p-3">
-        <Tabs activeKey={mode} onSelect={setMode} className="mb-3">
-          <Tab eventKey="text" title="Из текста" />
-          <Tab eventKey="topic" title="По теме" />
-        </Tabs>
+      <div className="input-section">
+        <div className="modes">
+          <button
+            className={`mode-btn ${mode === 'text' ? 'active' : ''}`}
+            onClick={() => setMode('text')}
+          >
+            <span className="mode-icon">📄</span> Из текста
+          </button>
+          <button
+            className={`mode-btn ${mode === 'topic' ? 'active' : ''}`}
+            onClick={() => setMode('topic')}
+          >
+            <span className="mode-icon">🏷️</span> По теме
+          </button>
+        </div>
 
         {mode === 'text' ? (
-          <Form.Control as="textarea" rows={4} value={text}
-            onChange={(e) => setText(e.target.value)} placeholder="Вставьте текст..." />
+          <>
+            <div className="input-label">
+              <span className="label-icon">📖</span>
+              <span>Вставьте текст для создания карточек</span>
+            </div>
+            <textarea
+              className="input-textarea"
+              rows={4}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Вставьте текст..."
+            />
+          </>
         ) : (
-          <Form.Control value={topic} onChange={(e) => setTopic(e.target.value)}
-            placeholder="Введите тему..." />
+          <>
+            <div className="input-label">
+              <span className="label-icon">🎯</span>
+              <span>Введите тему</span>
+            </div>
+            <input
+              type="text"
+              className="input-url"
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              placeholder="Введите тему..."
+            />
+          </>
         )}
 
-        <Row className="mt-3">
-          <Col md={3}>
-            <Form.Label>Язык</Form.Label>
-            <Form.Select value={language} onChange={(e) => setLanguage(e.target.value)}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
+          <div>
+            <div className="input-label">
+              <span className="label-icon">🌐</span>
+              <span>Язык</span>
+            </div>
+            <select className="input-url" value={language} onChange={(e) => setLanguage(e.target.value)}>
               <option value="ru">Русский</option>
               <option value="en">Английский</option>
-            </Form.Select>
-          </Col>
-          <Col md={2}>
-            <Form.Label>Карточки</Form.Label>
-            <Form.Control type="number" min={1} max={20} value={numCards}
-              onChange={(e) => setNumCards(Number(e.target.value))} />
-          </Col>
-          <Col md={3}>
-            <Form.Label>Модель</Form.Label>
-            <Form.Control value={model} onChange={(e) => setModel(e.target.value)}
-              placeholder="llama3.2:3b" />
-          </Col>
-        </Row>
+            </select>
+          </div>
+          <div>
+            <div className="input-label">
+              <span className="label-icon">🎴</span>
+              <span>Кол-во карточек</span>
+            </div>
+            <div className="slider-container">
+              <span className="slider-min">1</span>
+              <input
+                type="range"
+                className="questions-slider"
+                min={1}
+                max={20}
+                value={numCards}
+                onChange={(e) => setNumCards(Number(e.target.value))}
+              />
+              <span className="slider-max">20</span>
+            </div>
+            <div style={{ textAlign: 'center', marginTop: '5px' }}>{numCards}</div>
+          </div>
+          <div>
+            <div className="input-label">
+              <span className="label-icon">🤖</span>
+              <span>Модель</span>
+            </div>
+            <input
+              type="text"
+              className="input-url"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+              placeholder="llama3.2:3b"
+            />
+          </div>
+        </div>
 
-        <Button className="mt-3" onClick={generate} disabled={loading}>
-          {loading ? <Spinner size="sm" /> : 'Сгенерировать карточки'}
-        </Button>
-      </Card>
+        <button className="generate-btn" onClick={generate} disabled={loading}>
+          {loading ? <span className="spinner"></span> : '✨ Сгенерировать карточки'}
+        </button>
+      </div>
 
       {flashcards && Array.isArray(flashcards) && (
-        <Row>
-          {flashcards.map((card, i) => (
-            <Col key={i} md={6} lg={4}>
-              <FlashcardFlip front={card.front} back={card.back} />
-            </Col>
-          ))}
-        </Row>
+        <div className="results-section">
+          <div className="result-header">
+            <h2>🎴 Ваши карточки</h2>
+            <div className="flashcard-counter">{flashcards.length} карточек</div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '1rem' }}>
+            {flashcards.map((card, i) => (
+              <FlashcardFlip key={i} front={card.front} back={card.back} />
+            ))}
+          </div>
+        </div>
       )}
     </div>
   )

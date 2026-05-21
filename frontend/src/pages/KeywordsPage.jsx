@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Card, Form, Button, Spinner, Row, Col, Badge } from 'react-bootstrap'
 import api from '../api/client'
 
 export default function KeywordsPage() {
@@ -28,41 +27,86 @@ export default function KeywordsPage() {
 
   return (
     <div>
-      <h2 className="mb-4">Извлечение ключевых слов</h2>
+      <h2 className="result-header" style={{ marginTop: 0 }}>🔑 Извлечение ключевых слов</h2>
 
-      <Card className="mb-3 p-3">
-        <Form.Control as="textarea" rows={6} value={text}
-          onChange={(e) => setText(e.target.value)} placeholder="Вставьте текст для извлечения ключевых слов..." />
+      <div className="input-section">
+        <div className="input-label">
+          <span className="label-icon">📖</span>
+          <span>Вставьте текст для анализа</span>
+        </div>
+        <textarea
+          className="input-textarea"
+          rows={6}
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="Вставьте текст для извлечения ключевых слов..."
+        />
 
-        <Row className="mt-3">
-          <Col md={3}>
-            <Form.Label>Язык</Form.Label>
-            <Form.Select value={language} onChange={(e) => setLanguage(e.target.value)}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
+          <div>
+            <div className="input-label">
+              <span className="label-icon">🌐</span>
+              <span>Язык</span>
+            </div>
+            <select className="input-url" value={language} onChange={(e) => setLanguage(e.target.value)}>
               <option value="ru">Русский</option>
               <option value="en">Английский</option>
-            </Form.Select>
-          </Col>
-          <Col md={2}>
-            <Form.Label>Макс. ключевых слов</Form.Label>
-            <Form.Control type="number" min={3} max={30} value={maxKeywords}
-              onChange={(e) => setMaxKeywords(Number(e.target.value))} />
-          </Col>
-        </Row>
+            </select>
+          </div>
 
-        <Button className="mt-3" onClick={generate} disabled={loading}>
-          {loading ? <Spinner size="sm" /> : 'Извлечь ключевые слова'}
-        </Button>
-      </Card>
-
-      {keywords && Array.isArray(keywords) && (
-        <Card className="p-3">
-          <h5>Ключевые слова</h5>
           <div>
+            <div className="input-label">
+              <span className="label-icon">🔢</span>
+              <span>Макс. ключевых слов</span>
+            </div>
+            <div className="slider-container">
+              <span className="slider-min">3</span>
+              <input
+                type="range"
+                className="questions-slider"
+                min={3}
+                max={30}
+                value={maxKeywords}
+                onChange={(e) => setMaxKeywords(Number(e.target.value))}
+              />
+              <span className="slider-max">30</span>
+            </div>
+            <div style={{ textAlign: 'center', marginTop: '5px', fontWeight: 'bold' }}>{maxKeywords}</div>
+          </div>
+        </div>
+
+        <button className="generate-btn" onClick={generate} disabled={loading}>
+          {loading ? <span className="spinner"></span> : '🔍 Извлечь ключевые слова'}
+        </button>
+      </div>
+
+      {keywords && Array.isArray(keywords) && keywords.length > 0 && (
+        <div className="results-section">
+          <div className="result-header">
+            <h2>🏷️ Ключевые слова</h2>
+            <div className="info-box" style={{ margin: 0 }}>
+              Найдено: {keywords.length} слов
+            </div>
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
             {keywords.map((kw, i) => (
-              <Badge key={i} bg="primary" className="me-2 mb-2 fs-6">{kw}</Badge>
+              <div
+                key={i}
+                className="mode-btn"
+                style={{
+                  flex: '0 0 auto',
+                  padding: '0.5rem 1rem',
+                  cursor: 'default',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  color: 'white',
+                  border: 'none'
+                }}
+              >
+                #{kw}
+              </div>
             ))}
           </div>
-        </Card>
+        </div>
       )}
     </div>
   )

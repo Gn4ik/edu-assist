@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Card, Form, Button, Spinner, Tabs, Tab, Row, Col } from 'react-bootstrap'
 import api from '../api/client'
 
 export default function SummaryPage() {
@@ -32,62 +31,137 @@ export default function SummaryPage() {
 
   return (
     <div>
-      <h2 className="mb-4">Конспект</h2>
+      <h2 className="result-header" style={{ marginTop: 0 }}>📝 Конспект</h2>
 
-      <Card className="mb-3 p-3">
-        <Tabs activeKey={mode} onSelect={setMode} className="mb-3">
-          <Tab eventKey="text" title="Из текста" />
-          <Tab eventKey="topic" title="По теме" />
-        </Tabs>
+      <div className="input-section">
+        <div className="modes">
+          <button
+            className={`mode-btn ${mode === 'text' ? 'active' : ''}`}
+            onClick={() => setMode('text')}
+          >
+            <span className="mode-icon">📄</span> Из текста
+          </button>
+          <button
+            className={`mode-btn ${mode === 'topic' ? 'active' : ''}`}
+            onClick={() => setMode('topic')}
+          >
+            <span className="mode-icon">🏷️</span> По теме
+          </button>
+        </div>
 
         {mode === 'text' ? (
-          <Form.Control as="textarea" rows={6} value={text}
-            onChange={(e) => setText(e.target.value)} placeholder="Вставьте текст..." />
+          <>
+            <div className="input-label">
+              <span className="label-icon">📖</span>
+              <span>Вставьте текст для конспектирования</span>
+            </div>
+            <textarea
+              className="input-textarea"
+              rows={6}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Вставьте текст..."
+            />
+          </>
         ) : (
-          <Form.Control value={topic} onChange={(e) => setTopic(e.target.value)}
-            placeholder="Введите тему, например: Основы машинного обучения" />
+          <>
+            <div className="input-label">
+              <span className="label-icon">🎯</span>
+              <span>Введите тему</span>
+            </div>
+            <input
+              type="text"
+              className="input-url"
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              placeholder="Например: Основы машинного обучения"
+            />
+          </>
         )}
 
-        <Row className="mt-3">
-          <Col md={3}>
-            <Form.Label>Язык</Form.Label>
-            <Form.Select value={language} onChange={(e) => setLanguage(e.target.value)}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
+          <div>
+            <div className="input-label">
+              <span className="label-icon">🌐</span>
+              <span>Язык</span>
+            </div>
+            <select className="input-url" value={language} onChange={(e) => setLanguage(e.target.value)}>
               <option value="ru">Русский</option>
               <option value="en">Английский</option>
               <option value="es">Испанский</option>
               <option value="fr">Французский</option>
               <option value="de">Немецкий</option>
-            </Form.Select>
-          </Col>
-          <Col md={3}>
-            <Form.Label>Макс. пунктов</Form.Label>
-            <Form.Control type="number" min={3} max={20} value={maxPoints}
-              onChange={(e) => setMaxPoints(Number(e.target.value))} />
-          </Col>
-          <Col md={3}>
-            <Form.Label>Модель (необязательно)</Form.Label>
-            <Form.Control value={model} onChange={(e) => setModel(e.target.value)}
-              placeholder="llama3.2:3b" />
-          </Col>
-        </Row>
+            </select>
+          </div>
+          <div>
+            <div className="input-label">
+              <span className="label-icon">📊</span>
+              <span>Макс. пунктов</span>
+            </div>
+            <div className="slider-container">
+              <span className="slider-min">3</span>
+              <input
+                type="range"
+                className="questions-slider"
+                min={3}
+                max={20}
+                value={maxPoints}
+                onChange={(e) => setMaxPoints(Number(e.target.value))}
+              />
+              <span className="slider-max">20</span>
+            </div>
+            <div style={{ textAlign: 'center', marginTop: '5px' }}>{maxPoints}</div>
+          </div>
+          <div>
+            <div className="input-label">
+              <span className="label-icon">🤖</span>
+              <span>Модель</span>
+            </div>
+            <input
+              type="text"
+              className="input-url"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+              placeholder="llama3.2:3b"
+            />
+          </div>
+        </div>
 
-        <Button className="mt-3" onClick={generate} disabled={loading}>
-          {loading ? <Spinner size="sm" /> : 'Сгенерировать конспект'}
-        </Button>
-      </Card>
+        <button className="generate-btn" onClick={generate} disabled={loading}>
+          {loading ? <span className="spinner"></span> : '✨ Сгенерировать конспект'}
+        </button>
+      </div>
 
       {result && result.success && (
-        <Card className="p-3">
-          <h5>Конспект</h5>
-          <pre style={{ whiteSpace: 'pre-wrap' }}>{result.output}</pre>
-          <small className="text-muted">
-            {result.from_cache ? 'Из кэша' : 'Новый'} | {result.processing_time_ms} мс
+        <div className="results-section">
+          <div className="result-header">
+            <h2>📋 Результат</h2>
+            <button
+              className="copy-btn"
+              onClick={() => {
+                navigator.clipboard.writeText(result.output)
+                alert('Скопировано!')
+              }}
+            >
+              📋 Копировать
+            </button>
+          </div>
+          <div className="summary-content">
+            <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit', margin: 0, lineHeight: 1.6 }}>
+              {result.output}
+            </pre>
+          </div>
+          <div className="info-box" style={{ marginTop: '1rem' }}>
+            {result.from_cache ? '📦 Из кэша' : '✨ Новый'} | ⏱️ {result.processing_time_ms} мс
             {result.generation_id && ` | ID: ${result.generation_id}`}
-          </small>
-        </Card>
+          </div>
+        </div>
       )}
+
       {result && !result.success && (
-        <Card className="p-3 text-danger">{result.error}</Card>
+        <div className="info-box" style={{ backgroundColor: '#fee', color: '#c33' }}>
+          ❌ {result.error}
+        </div>
       )}
     </div>
   )

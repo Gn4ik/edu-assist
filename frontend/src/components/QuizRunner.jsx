@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { Card, Form, Button, Alert, ProgressBar } from 'react-bootstrap'
 
 export default function QuizRunner({ quiz }) {
   const [answers, setAnswers] = useState({})
@@ -13,54 +12,73 @@ export default function QuizRunner({ quiz }) {
 
   return (
     <div>
-      {quiz.map((q, idx) => (
-        <Card key={idx} className="mb-3">
-          <Card.Body>
-            <Card.Title>{idx + 1}. {q.question}</Card.Title>
-            {q.options.map((opt, optIdx) => (
-              <Form.Check
-                key={optIdx}
-                type="radio"
-                name={`q-${idx}`}
-                label={opt}
-                checked={answers[idx] === optIdx}
-                onChange={() => setAnswers({ ...answers, [idx]: optIdx })}
-                disabled={submitted}
-                isInvalid={submitted && answers[idx] === optIdx && optIdx !== q.correct}
-                isValid={submitted && optIdx === q.correct}
-              />
-            ))}
+      <div className="tests-list">
+        {quiz.map((q, idx) => (
+          <div key={idx} className="test-item">
+            <div className="test-question">
+              <span className="question-number">{idx + 1}.</span>
+              <span>{q.question}</span>
+            </div>
+            <div className="test-options">
+              {q.options.map((opt, optIdx) => (
+                <label key={optIdx} className="test-option">
+                  <input
+                    type="radio"
+                    name={`q-${idx}`}
+                    value={optIdx}
+                    checked={answers[idx] === optIdx}
+                    onChange={() => setAnswers({ ...answers, [idx]: optIdx })}
+                    disabled={submitted}
+                  />
+                  <span className="option-text">{opt}</span>
+                  {submitted && optIdx === q.correct && <span className="correct-mark">✓</span>}
+                  {submitted && answers[idx] === optIdx && optIdx !== q.correct && <span className="wrong-mark">✗</span>}
+                </label>
+              ))}
+            </div>
             {submitted && q.explanation && (
-              <Alert variant="info" className="mt-2 mb-0">
-                <small>{q.explanation}</small>
-              </Alert>
+              <div className="explanation">
+                💡 {q.explanation}
+              </div>
             )}
-          </Card.Body>
-        </Card>
-      ))}
+          </div>
+        ))}
+      </div>
 
       {!submitted && (
-        <Button
-          variant="primary"
+        <button
+          className="generate-btn"
+          style={{ width: 'auto', padding: '0.75rem 2rem' }}
           disabled={Object.keys(answers).length < quiz.length}
           onClick={() => setSubmitted(true)}
         >
-          Отправить ответы
-        </Button>
+          ✅ Отправить ответы
+        </button>
       )}
 
       {submitted && (
-        <div className="mt-3">
-          <h4>
-            Результат: {score}/{quiz.length} ({Math.round((score / quiz.length) * 100)}%)
-          </h4>
-          <ProgressBar
-            now={(score / quiz.length) * 100}
-            variant={score >= quiz.length * 0.7 ? 'success' : 'warning'}
-          />
-          <Button variant="outline-secondary" className="mt-2" onClick={() => { setAnswers({}); setSubmitted(false) }}>
-            Повторить
-          </Button>
+        <div className="results-section" style={{ marginTop: '1rem' }}>
+          <div className="result-header">
+            <h3>📊 Результат: {score}/{quiz.length} ({Math.round((score / quiz.length) * 100)}%)</h3>
+            <button className="copy-btn" onClick={() => { setAnswers({}); setSubmitted(false) }}>
+              🔄 Повторить
+            </button>
+          </div>
+          <div className="slider-container">
+            <div style={{
+              width: `${(score / quiz.length) * 100}%`,
+              height: '30px',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              borderRadius: '15px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              fontWeight: 'bold'
+            }}>
+              {Math.round((score / quiz.length) * 100)}%
+            </div>
+          </div>
         </div>
       )}
     </div>
