@@ -446,7 +446,7 @@ CREATE TABLE favorites (
   "num_questions": 5,
   "language": "en",
   "difficulty": "hard",        // NEW: easy | medium | hard
-  "model": "llama3.2:3b",     // NEW: override model
+  "model": "llama3.1:latest",     // NEW: override model
   "temperature": 0.7,          // NEW: override temperature
   "save_to_history": true      // NEW: always true by default
 }
@@ -469,7 +469,7 @@ CREATE TABLE favorites (
 {
   "type": "summary",            // summary | flashcards | quiz
   "text": "Long text about AI...",
-  "model_a": "llama3.2:3b",
+  "model_a": "llama3.1:latest",
   "model_b": "gemma2:2b",
   "language": "ru",
   "max_points": 7
@@ -479,7 +479,7 @@ CREATE TABLE favorites (
 {
   "success": true,
   "result_a": {
-    "model": "llama3.2:3b",
+    "model": "llama3.1:latest",
     "output": "Summary text from model A...",
     "processing_time_ms": 1200,
     "tokens_used": 400
@@ -571,7 +571,7 @@ GET /api/history?type=quiz&language=en&search=quantum&page=1&per_page=20
       "input_type": "text",
       "input_content": "Quantum mechanics...",
       "output_content": "{\"quiz\": [...]}",
-      "model_used": "llama3.2:3b",
+      "model_used": "llama3.1:latest",
       "language": "en",
       "difficulty": "hard",
       "processing_time_ms": 2100,
@@ -602,7 +602,7 @@ GET /api/history?type=quiz&language=en&search=quantum&page=1&per_page=20
   },
   "total_favorites": 12,
   "models_used": {
-    "llama3.2:3b": 60,
+    "llama3.1:latest": 60,
     "gemma2:2b": 27
   },
   "avg_processing_time_ms": 1450,
@@ -662,7 +662,7 @@ class Settings(BaseSettings):
 
     # Ollama
     OLLAMA_HOST: str = "http://localhost:11434"
-    OLLAMA_MODEL: str = "llama3.2:3b"
+    OLLAMA_MODEL: str = "llama3.1:latest"
     OLLAMA_TIMEOUT: int = 120
 
     # Chunking
@@ -1558,7 +1558,7 @@ async def gen_summary(
         raise HTTPException(400, detail="text or topic required")
     input_content = body.text or body.topic
     input_type = "text" if body.text else "topic"
-    model = body.model or user.settings and "default_model" or "llama3.2:3b"
+    model = body.model or user.settings and "default_model" or "llama3.1:latest"
     result = await generate(
         "summary", user.id, input_type, input_content, model,
         language=body.language, save=body.save_to_history, db=db,
@@ -1577,7 +1577,7 @@ async def gen_flashcards(
         raise HTTPException(400, detail="text or topic required")
     input_content = body.text or body.topic
     input_type = "text" if body.text else "topic"
-    model = body.model or "llama3.2:3b"
+    model = body.model or "llama3.1:latest"
     result = await generate(
         "flashcards", user.id, input_type, input_content, model,
         language=body.language, save=body.save_to_history, db=db,
@@ -1596,7 +1596,7 @@ async def gen_quiz(
         raise HTTPException(400, detail="text or topic required")
     input_content = body.text or body.topic
     input_type = "text" if body.text else "topic"
-    model = body.model or "llama3.2:3b"
+    model = body.model or "llama3.1:latest"
     result = await generate(
         "quiz", user.id, input_type, input_content, model,
         language=body.language, difficulty=body.difficulty or "medium",
@@ -1612,7 +1612,7 @@ async def gen_keywords(
     user: User = Depends(require_rate_limit),
     db: AsyncSession = Depends(get_db),
 ):
-    model = body.model or "llama3.2:3b"
+    model = body.model or "llama3.1:latest"
     result = await generate(
         "keywords", user.id, "text", body.text, model,
         language=body.language, save=True, db=db,
@@ -1627,7 +1627,7 @@ async def gen_simplify(
     user: User = Depends(require_rate_limit),
     db: AsyncSession = Depends(get_db),
 ):
-    model = body.model or "llama3.2:3b"
+    model = body.model or "llama3.1:latest"
     result = await generate(
         "simplify", user.id, "text", body.text, model,
         language=body.language, save=True, db=db,
@@ -1642,7 +1642,7 @@ async def gen_study_plan(
     user: User = Depends(require_rate_limit),
     db: AsyncSession = Depends(get_db),
 ):
-    model = body.model or "llama3.2:3b"
+    model = body.model or "llama3.1:latest"
     result = await generate(
         "study_plan", user.id, "topic", body.topics, model,
         language=body.language, difficulty=body.difficulty,
@@ -2259,7 +2259,7 @@ services:
       - "8000:8000"
     environment:
       - OLLAMA_HOST=http://ollama:11434
-      - OLLAMA_MODEL=llama3.2:3b
+      - OLLAMA_MODEL=llama3.1:latest
       - OLLAMA_TIMEOUT=120
       - DATABASE_URL=sqlite+aiosqlite:///./edu_assist.db
       - JWT_SECRET_KEY=${JWT_SECRET_KEY:-change-me-in-production}
@@ -2281,7 +2281,7 @@ services:
   # Model puller — pulls the model on first start
   ollama-pull:
     image: ollama/ollama:latest
-    entrypoint: ["sh", "-c", "ollama pull llama3.2:3b && ollama pull gemma2:2b"]
+    entrypoint: ["sh", "-c", "ollama pull llama3.1:latest && ollama pull gemma2:2b"]
     depends_on:
       - ollama
     restart: "no"
@@ -2346,7 +2346,7 @@ fi
 echo "[1/3] Checking Ollama models..."
 docker compose up -d ollama
 sleep 5
-for model in llama3.2:3b gemma2:2b; do
+for model in llama3.1:latest gemma2:2b; do
     if ! docker compose exec ollama ollama list 2>/dev/null | grep -q "$model"; then
         echo "  Pulling $model..."
         docker compose exec ollama ollama pull "$model"
@@ -2543,7 +2543,7 @@ B:  [Setup][ Auth  ][Dash][Summary][Flash][Quiz][KW+Cmp][Hist][Fav][Set][Resp][D
 
 | Model | Params | Quantization | Summary (s) | Flashcards (s) | Quiz (s) | Quality (1-5) | RAM (MB) |
 |-------|--------|-------------|-------------|-----------------|----------|---------------|----------|
-| llama3.2:3b | 3B | Q4_K_M | 12.3 | 8.7 | 15.2 | 4.0 | 2400 |
+| llama3.1:latest | 3B | Q4_K_M | 12.3 | 8.7 | 15.2 | 4.0 | 2400 |
 | gemma2:2b | 2B | Q4_0 | 8.1 | 5.9 | 10.4 | 3.5 | 1600 |
 | phi3:mini | 3.8B | Q4 | 10.8 | 7.2 | 12.9 | 3.8 | 2200 |
 | vikhr-llama:1b | 1B | Q8 | 4.2 | 3.1 | 6.8 | 3.0 | 900 |
@@ -2573,7 +2573,7 @@ graph TB
 
     subgraph AI
         Ollama[Ollama Server]
-        Llama[llama3.2:3b]
+        Llama[llama3.1:latest]
         Gemma[gemma2:2b]
     end
 

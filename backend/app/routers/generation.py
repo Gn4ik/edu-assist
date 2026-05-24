@@ -24,7 +24,7 @@ def _get_model(user: User, request_model: str | None) -> str:
                 return settings["default_model"]
         except (json.JSONDecodeError, TypeError):
             pass
-    return "llama3.2:3b"
+    return "llama3.1:latest"
 
 
 @router.post("/summary")

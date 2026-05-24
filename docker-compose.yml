@@ -14,7 +14,7 @@ services:
 
   ollama-pull:
     image: ollama/ollama:latest
-    entrypoint: ["sh", "-c", "sleep 3 && ollama pull llama3.2:3b && ollama pull gemma2:2b"]
+    entrypoint: ["sh", "-c", "sleep 3 && ollama pull llama3.1:latest && ollama pull gemma2:2b"]
     depends_on:
       - ollama
     restart: "no"
@@ -25,7 +25,7 @@ services:
       - "8000:8000"
     environment:
       - OLLAMA_HOST=http://ollama:11434
-      - OLLAMA_MODEL=llama3.2:3b
+      - OLLAMA_MODEL=llama3.1:latest
       - OLLAMA_TIMEOUT=120
       - DATABASE_URL=sqlite+aiosqlite:///./edu_assist.db
       - JWT_SECRET_KEY=${JWT_SECRET_KEY:-change-me-in-production}

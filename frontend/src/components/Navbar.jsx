@@ -13,7 +13,7 @@ export default function Navbar() {
     { path: '/summary', label: 'Конспект' },
     { path: '/flashcards', label: 'Карточки'},
     { path: '/quiz', label: 'Тест'},
-    { path: '/keywords', label: 'Ключевые слова' },
+    { path: '/keywords', label: 'Тэги' },
     { path: '/history', label: 'История'},
     { path: '/favorites', label: 'Избранное' },
   ]

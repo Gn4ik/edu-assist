@@ -115,13 +115,13 @@ export default function FlashcardsPage() {
               className="input-url"
               value={model}
               onChange={(e) => setModel(e.target.value)}
-              placeholder="llama3.2:3b"
+              placeholder="llama3.1:latest"
             />
           </div>
         </div>
 
         <button className="generate-btn" onClick={generate} disabled={loading}>
-          {loading ? <span className="spinner"></span> : '✨ Сгенерировать карточки'}
+          {loading ? <span className="spinner"></span> : 'Сгенерировать карточки'}
         </button>
       </div>
 

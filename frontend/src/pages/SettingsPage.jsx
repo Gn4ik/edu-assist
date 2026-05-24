@@ -22,7 +22,7 @@ export default function SettingsPage() {
 
   const saveSettings = async () => {
     const settings = JSON.stringify({
-      default_model: defaultModel || 'llama3.2:3b',
+      default_model: defaultModel || 'llama3.1:latest',
       temperature: defaultTemperature,
     })
     setMessage('Настройки сохранены!')
@@ -61,7 +61,7 @@ export default function SettingsPage() {
           className="input-url"
           value={defaultModel}
           onChange={(e) => setDefaultModel(e.target.value)}
-          placeholder="llama3.2:3b"
+          placeholder="llama3.1:latest"
           style={{ marginBottom: '1rem' }}
         />
 

@@ -18,7 +18,7 @@ export default function DashboardPage() {
         <div className="results-section" style={{ marginTop: '2rem' }}>
           <div className="row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
             <div>
-              <h3 style={{ color: '#667eea', marginBottom: '1rem' }}>📈 По типу</h3>
+              <h3 style={{ color: '#667eea', marginBottom: '1rem' }}>По типу</h3>
               {Object.entries(stats.by_type).map(([type, count]) => (
                 <div key={type} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
                   <span>{type}</span>

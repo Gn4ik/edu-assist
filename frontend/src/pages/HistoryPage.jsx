@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
 import api from '../api/client'
 
+const getTypeIcon = (type) => {
+  return ''
+}
+
+
 export default function HistoryPage() {
   const [items, setItems] = useState([])
   const [total, setTotal] = useState(0)
@@ -71,7 +76,7 @@ export default function HistoryPage() {
               <option value="summary">Конспект</option>
               <option value="flashcards">Карточки</option>
               <option value="quiz">Тест</option>
-              <option value="keywords">Ключевые слова</option>
+              <option value="keywords">Тэги</option>
               <option value="simplify">Упрощение</option>
               <option value="study_plan">Учебный план</option>
             </select>
@@ -141,7 +146,7 @@ export default function HistoryPage() {
                     </td>
                     <td style={{ padding: '0.75rem' }}>
                       <span className="info-box" style={{ margin: 0, padding: '0.25rem 0.5rem', fontSize: '0.85rem' }}>
-                        ⚡ {item.processing_time_ms} мс
+                        {item.processing_time_ms} мс
                       </span>
                     </td>
                     <td style={{ padding: '0.75rem', fontSize: '0.85rem' }}>
@@ -163,10 +168,11 @@ export default function HistoryPage() {
                         </button>
                         <button
                           className="copy-btn"
-                          style={{ padding: '0.25rem 0.5rem', fontSize: '0.85rem', background: '#ef4444' }}
+                          style={{ padding: '0.1rem 0.5rem', fontSize: '1.1rem', background: '#ef4444', color: '#ffffff' }}
                           onClick={() => deleteItem(item.id)}
                           title="Удалить"
                         >
+                          ×
                         </button>
                       </div>
                     </td>

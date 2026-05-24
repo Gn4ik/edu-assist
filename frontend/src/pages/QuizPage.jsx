@@ -138,7 +138,7 @@ export default function QuizPage() {
               className="input-url"
               value={model}
               onChange={(e) => setModel(e.target.value)}
-              placeholder="llama3.2:3b"
+              placeholder="llama3.1:latest"
             />
           </div>
         </div>

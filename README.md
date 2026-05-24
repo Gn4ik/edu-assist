@@ -52,7 +52,7 @@ curl -fsSL https://ollama.com/install.sh | sh
 ollama pull <model>
 ```
 
-- Можно использовать любую доступную модель. Например: `llama3.2:3b`, `gemma2:2b`, ...
+- Можно использовать любую доступную модель. Например: `llama3.1:latest`, `gemma2:2b`, ...
 
 ### 4. Запуск Ollama сервера
 

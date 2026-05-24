@@ -73,14 +73,14 @@ export default function KeywordsPage() {
         </div>
 
         <button className="generate-btn" onClick={generate} disabled={loading}>
-          {loading ? <span className="spinner"></span> : 'Извлечь ключевые слова'}
+          {loading ? <span className="spinner"></span> : 'Извлечь тэги'}
         </button>
       </div>
 
       {keywords && Array.isArray(keywords) && keywords.length > 0 && (
         <div className="results-section">
           <div className="result-header">
-            <h2>Ключевые слова</h2>
+            <h2>Тэги</h2>
             <div className="info-box" style={{ margin: 0 }}>
               Найдено: {keywords.length} слов
             </div>
