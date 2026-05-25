@@ -1,4 +1,4 @@
-SUMMARY_PROMPT = """You are a study assistant. Create a concise summary in {language} of the following text. Use a bulleted list of {max_points} points. Be brief, highlight only the most important information.
+SUMMARY_PROMPT = """You are a study assistant. Create a concise summary in {language} of the following text. Use a bulleted list of {max_points} points. **Use Markdown formatting** for better readability (bold, italic, code blocks if needed). Be brief, highlight only the most important information.
 
 Text: {text}
 

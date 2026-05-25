@@ -32,8 +32,16 @@ class Settings(BaseSettings):
     CACHE_DIR: Path = BASE_DIR / ".cache"
     CACHE_SIZE_MB: int = 200
 
-    # Database
-    DATABASE_URL: str = "sqlite+aiosqlite:///./edu_assist.db"
+    # Database - PostgreSQL
+    POSTGRES_USER: str = "eduassist"
+    POSTGRES_PASSWORD: str = "your_secure_password"
+    POSTGRES_HOST: str = "localhost"
+    POSTGRES_PORT: int = 5432
+    POSTGRES_DB: str = "eduassist"
+    
+    @property
+    def DATABASE_URL(self) -> str:
+        return f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
     # Auth
     JWT_SECRET_KEY: str = "change-me-in-production-use-a-real-secret"

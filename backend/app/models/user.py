@@ -1,5 +1,4 @@
 from datetime import datetime, timezone
-
 from sqlalchemy import Boolean, DateTime, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -17,7 +16,7 @@ class User(Base):
     api_key: Mapped[str | None] = mapped_column(String(64), unique=True, nullable=True)
     settings: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime, default=lambda: datetime.now(timezone.utc)
+        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
     )
 
     generations: Mapped[list["Generation"]] = relationship(

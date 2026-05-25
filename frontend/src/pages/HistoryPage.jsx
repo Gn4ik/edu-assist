@@ -1,10 +1,18 @@
 import { useState, useEffect } from 'react'
 import api from '../api/client'
+import HistoryDetailModal from '../components/HistoryDetailModal'
 
-const getTypeIcon = (type) => {
-  return ''
+const getTypeLabel = (type) => {
+  const labels = {
+    summary: 'Конспект',
+    flashcards: 'Карточки',
+    quiz: 'Тест',
+    keywords: 'Ключевые слова',
+    simplify: 'Упрощение',
+    study_plan: 'Учебный план'
+  }
+  return labels[type] || type
 }
-
 
 export default function HistoryPage() {
   const [items, setItems] = useState([])
@@ -13,6 +21,8 @@ export default function HistoryPage() {
   const [pages, setPages] = useState(0)
   const [filter, setFilter] = useState('')
   const [search, setSearch] = useState('')
+  const [selectedGenerationId, setSelectedGenerationId] = useState(null)
+  const [showModal, setShowModal] = useState(false)
 
   const fetchHistory = (p = page) => {
     const params = { page: p, per_page: 20 }
@@ -42,6 +52,21 @@ export default function HistoryPage() {
     } else {
       await api.post('/api/favorites', { generation_id: id })
     }
+    fetchHistory()
+  }
+
+  const viewDetails = (id) => {
+    setSelectedGenerationId(id)
+    setShowModal(true)
+  }
+
+  const closeModal = () => {
+    setShowModal(false)
+    setSelectedGenerationId(null)
+  }
+
+  const handleFavoriteToggle = async (id, isFav) => {
+    await toggleFavorite(id, isFav)
     fetchHistory()
   }
 
@@ -123,7 +148,11 @@ export default function HistoryPage() {
               </thead>
               <tbody>
                 {items.map((item) => (
-                  <tr key={item.id} style={{ borderBottom: '1px solid var(--border, #f0f0f0)' }}>
+                  <tr 
+                    key={item.id} 
+                    style={{ borderBottom: '1px solid var(--border, #f0f0f0)', cursor: 'pointer' }}
+                    onClick={() => viewDetails(item.id)}
+                  >
                     <td style={{ padding: '0.75rem' }}>
                       <span style={{
                         display: 'inline-flex',
@@ -135,7 +164,7 @@ export default function HistoryPage() {
                         color: getTypeColor(item.type),
                         fontWeight: '600'
                       }}>
-                        {getTypeIcon(item.type)} {item.type}
+                        {getTypeLabel(item.type)}
                       </span>
                     </td>
                     <td style={{ padding: '0.75rem', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -153,7 +182,7 @@ export default function HistoryPage() {
                       {new Date(item.created_at).toLocaleDateString('ru-RU')}
                     </td>
                     <td style={{ padding: '0.75rem' }}>
-                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <div style={{ display: 'flex', gap: '0.5rem' }} onClick={(e) => e.stopPropagation()}>
                         <button
                           className="copy-btn"
                           style={{
@@ -184,25 +213,26 @@ export default function HistoryPage() {
 
           {pages > 1 && (
             <div className="flashcard-controls" style={{ marginTop: '1.5rem' }}>
-              <button
-                onClick={() => setPage(page - 1)}
-                disabled={page === 1}
-              >
+              <button onClick={() => setPage(page - 1)} disabled={page === 1}>
                 ◀ Назад
               </button>
               <span style={{ padding: '0.5rem 1rem', background: 'var(--surface, #f0f4ff)', borderRadius: '8px' }}>
                 Страница {page} из {pages}
               </span>
-              <button
-                onClick={() => setPage(page + 1)}
-                disabled={page === pages}
-              >
+              <button onClick={() => setPage(page + 1)} disabled={page === pages}>
                 Вперед ▶
               </button>
             </div>
           )}
         </>
       )}
+
+      <HistoryDetailModal
+        show={showModal}
+        onClose={closeModal}
+        generationId={selectedGenerationId}
+        onFavoriteToggle={handleFavoriteToggle}
+      />
     </div>
   )
 }

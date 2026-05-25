@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import api from '../api/client'
 import QuizRunner from '../components/QuizRunner'
+import ModelSelector from '../components/ModelSelector'
 
 export default function QuizPage() {
   const [mode, setMode] = useState('text')
@@ -129,18 +130,7 @@ export default function QuizPage() {
             </select>
           </div>
 
-          <div>
-            <div className="input-label">
-              <span>Модель</span>
-            </div>
-            <input
-              type="text"
-              className="input-url"
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
-              placeholder="llama3.1:latest"
-            />
-          </div>
+          <ModelSelector value={model} onChange={setModel} autoSelectFirst={true} />
         </div>
 
         <button className="generate-btn" onClick={generate} disabled={loading}>

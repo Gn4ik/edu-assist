@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import api from '../api/client'
+import ModelSelector from '../components/ModelSelector'
 
 export default function KeywordsPage() {
   const [text, setText] = useState('')
   const [language, setLanguage] = useState('ru')
   const [maxKeywords, setMaxKeywords] = useState(10)
+  const [model, setModel] = useState('')
   const [keywords, setKeywords] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -13,7 +15,7 @@ export default function KeywordsPage() {
     setKeywords(null)
     try {
       const res = await api.post('/api/generation/keywords', {
-        text, language, max_keywords: maxKeywords,
+        text, language, max_keywords: maxKeywords, model: model || undefined
       })
       if (res.data.success) {
         setKeywords(res.data.output)
@@ -70,6 +72,8 @@ export default function KeywordsPage() {
             </div>
             <div style={{ textAlign: 'center', marginTop: '5px', fontWeight: 'bold' }}>{maxKeywords}</div>
           </div>
+
+          <ModelSelector value={model} onChange={setModel} autoSelectFirst={true} />
         </div>
 
         <button className="generate-btn" onClick={generate} disabled={loading}>

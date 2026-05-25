@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import api from '../api/client'
+import ModelSelector from '../components/ModelSelector'
+import MarkdownRenderer from '../components/MarkdownRenderer'
 
 export default function SummaryPage() {
   const [mode, setMode] = useState('text')
@@ -106,18 +108,7 @@ export default function SummaryPage() {
             </div>
             <div style={{ textAlign: 'center', marginTop: '5px' }}>{maxPoints}</div>
           </div>
-          <div>
-            <div className="input-label">
-              <span>Модель</span>
-            </div>
-            <input
-              type="text"
-              className="input-url"
-              value={model}
-              onChange={(e) => setModel(e.target.value)}
-              placeholder="llama3.1:latest"
-            />
-          </div>
+          <ModelSelector value={model} onChange={setModel} autoSelectFirst={true} />
         </div>
 
         <button className="generate-btn" onClick={generate} disabled={loading}>
@@ -140,9 +131,7 @@ export default function SummaryPage() {
             </button>
           </div>
           <div className="summary-content">
-            <pre style={{ whiteSpace: 'pre-wrap', fontFamily: 'inherit', margin: 0, lineHeight: 1.6 }}>
-              {result.output}
-            </pre>
+            <MarkdownRenderer content={result.output} />
           </div>
           <div className="info-box" style={{ marginTop: '1rem' }}>
             {result.from_cache ? 'Из кэша' : 'Новый'} | {result.processing_time_ms} мс

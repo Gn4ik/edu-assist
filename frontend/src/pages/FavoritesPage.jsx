@@ -1,8 +1,23 @@
 import { useState, useEffect } from 'react'
 import api from '../api/client'
+import HistoryDetailModal from '../components/HistoryDetailModal'
+
+const getTypeLabel = (type) => {
+  const labels = {
+    summary: 'Конспект',
+    flashcards: 'Карточки',
+    quiz: 'Тест',
+    keywords: 'Ключевые слова',
+    simplify: 'Упрощение',
+    study_plan: 'Учебный план'
+  }
+  return labels[type] || type
+}
 
 export default function FavoritesPage() {
   const [items, setItems] = useState([])
+  const [selectedGenerationId, setSelectedGenerationId] = useState(null)
+  const [showModal, setShowModal] = useState(false)
 
   const fetchFavorites = () => {
     api.get('/api/favorites').then((res) => setItems(res.data.items))
@@ -17,6 +32,36 @@ export default function FavoritesPage() {
     }
   }
 
+  const viewDetails = (generationId) => {
+    setSelectedGenerationId(generationId)
+    setShowModal(true)
+  }
+
+  const closeModal = () => {
+    setShowModal(false)
+    setSelectedGenerationId(null)
+  }
+
+  const handleFavoriteToggle = async (id, isFav) => {
+    if (isFav) {
+      const fav = items.find(f => f.generation_id === id)
+      if (fav) await api.delete(`/api/favorites/${fav.favorite_id}`)
+      fetchFavorites()
+    }
+  }
+
+  const getTypeColor = (type) => {
+    const colors = {
+      summary: '#667eea',
+      flashcards: '#10b981',
+      quiz: '#f59e0b',
+      keywords: '#8b5cf6',
+      simplify: '#ef4444',
+      study_plan: '#06b6d4'
+    }
+    return colors[type] || '#6b7280'
+  }
+
   return (
     <div>
       <h2 className="result-header" style={{ marginTop: 0 }}>Избранное</h2>
@@ -29,16 +74,32 @@ export default function FavoritesPage() {
       ) : (
         <div style={{ display: 'grid', gap: '1rem' }}>
           {items.map((item) => (
-            <div key={item.favorite_id} className="results-section">
+            <div 
+              key={item.favorite_id} 
+              className="results-section"
+              style={{ cursor: 'pointer' }}
+              onClick={() => viewDetails(item.generation_id)}
+            >
               <div className="result-header" style={{ marginBottom: '0.75rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <h3 style={{ margin: 0, color: '#667eea' }}>{item.type}</h3>
+                  <span style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    padding: '0.25rem 0.75rem',
+                    borderRadius: '20px',
+                    background: getTypeColor(item.type) + '20',
+                    color: getTypeColor(item.type),
+                    fontWeight: '600'
+                  }}>
+                    {getTypeLabel(item.type)}
+                  </span>
                   <code style={{ fontSize: '0.85rem' }}>{item.model_used}</code>
                 </div>
                 <button
                   className="copy-btn"
                   style={{ background: '#ef4444' }}
-                  onClick={() => remove(item.favorite_id)}
+                  onClick={(e) => { e.stopPropagation(); remove(item.favorite_id) }}
                 >
                   Удалить
                 </button>
@@ -51,21 +112,6 @@ export default function FavoritesPage() {
                   {item.input_content}
                 </div>
 
-                {item.output && (
-                  <>
-                    <div className="input-label" style={{ marginBottom: '0.5rem' }}>
-                      <span>Результат</span>
-                    </div>
-                    <div className="info-box" style={{ marginBottom: 0, background: 'var(--bg, #f9f9f9)' }}>
-                      <pre style={{ margin: 0, whiteSpace: 'pre-wrap', fontFamily: 'inherit' }}>
-                        {typeof item.output === 'string'
-                          ? item.output.substring(0, 200) + (item.output.length > 200 ? '...' : '')
-                          : JSON.stringify(item.output, null, 2).substring(0, 200)}
-                      </pre>
-                    </div>
-                  </>
-                )}
-
                 <div style={{ marginTop: '0.75rem', fontSize: '0.85rem', color: 'var(--muted, #666)' }}>
                   Добавлено: {new Date(item.created_at).toLocaleDateString('ru-RU')}
                 </div>
@@ -74,6 +120,13 @@ export default function FavoritesPage() {
           ))}
         </div>
       )}
+
+      <HistoryDetailModal
+        show={showModal}
+        onClose={closeModal}
+        generationId={selectedGenerationId}
+        onFavoriteToggle={handleFavoriteToggle}
+      />
     </div>
   )
 }
