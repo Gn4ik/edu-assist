@@ -16,7 +16,6 @@ def export_pdf(title: str, content: str, author: str = "EduAssist", font_path: s
     c = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
     left_margin = 20 * mm
-    max_text_width = width - 40 * mm
 
     font_name = "Helvetica"
     if font_path:

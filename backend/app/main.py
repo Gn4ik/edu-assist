@@ -23,7 +23,7 @@ logger = logging.getLogger("edu_assist")
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI):  # noqa: ARG001
     logger.info("Starting EduAssist v%s", settings.APP_VERSION)
     await init_db()
     settings.UPLOAD_DIR.mkdir(exist_ok=True)
@@ -38,7 +38,6 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# Middleware
 app.add_middleware(LoggingMiddleware)
 app.add_middleware(
     CORSMiddleware,
@@ -51,7 +50,7 @@ app.add_middleware(
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
-    logger.exception("Unhandled exception on %s %s", request.method, request.url.path)
+    logger.exception("Unhandled exception on %s %s. Detail: %s", request.method, request.url.path, exc)
     return JSONResponse(
         status_code=500,
         content={
@@ -62,7 +61,6 @@ async def global_exception_handler(request: Request, exc: Exception):
     )
 
 
-# Routers
 app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(users.router)

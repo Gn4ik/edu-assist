@@ -45,7 +45,7 @@ async def main():
     failures = [r for r in results if r["status"] != 200]
     times = [r["time"] for r in successes]
 
-    print(f"\nResults:")
+    print("\nResults:")
     print(f"  Total time: {total_time:.2f}s")
     print(f"  Requests/sec: {TOTAL / total_time:.1f}")
     print(f"  Successes: {len(successes)}")
@@ -56,7 +56,7 @@ async def main():
         print(f"  Min response time: {min(times)*1000:.0f}ms")
 
     if failures:
-        print(f"\nSample errors:")
+        print("\nSample errors:")
         for f in failures[:5]:
             print(f"  Request {f['id']}: {f['error']}")
 

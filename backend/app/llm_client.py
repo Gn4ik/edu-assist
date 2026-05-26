@@ -57,7 +57,6 @@ async def generate_with_long_text(prompt_template: str, text: str, **kwargs) -> 
         prompt = prompt_template.format(text=text, **kwargs)
         return await call_ollama(prompt)
 
-    # Для длинных текстов генерируем для каждого чанка и объединяем
     results = []
     for i, chunk in enumerate(chunks):
         chunk_prompt = prompt_template.format(text=chunk, **kwargs)

@@ -1,0 +1,64 @@
+# Минимальная версия Ruff
+target-version = "py313"
+
+# Исключаем venv и миграции
+exclude = [
+    "venv",
+    ".venv",
+    "__pycache__",
+    "migrations",
+    "build",
+    "dist",
+]
+
+# Выбираем правила
+select = [
+    # Pyflakes (F) - неиспользуемые импорты/переменные
+    "F",
+    
+    # Pycodestyle (E, W) - стиль кода
+    "E", "W",
+    
+    # Isort (I) - сортировка импортов
+    "I",
+    
+    # Pylint (PLC, PLE, PLW) - дополнительный анализ
+    "PLC", "PLE", "PLW",
+    
+    # Pyupgrade (UP) - современный синтаксис Python
+    "UP",
+    
+    # Flake8 Bugbear (B) - поиск багов
+    "B",
+    
+    # Flake8 Comprehensions (C4) - улучшение comprehensions
+    "C4",
+    
+    # Flake8 Unused Arguments (ARG) - неиспользуемые аргументы
+    "ARG",
+    
+    # Flake8 No Pep 420 (INP) - проверка модулей
+    "INP",
+    
+    # FastAPI специфичные проверки (через flake8 plugins)
+    "FAST",  # Нужно установить: ruff check --help
+]
+
+# Игнорируем некоторые правила
+ignore = [
+    "E501",  # Слишком длинные строки (можно игнорировать)
+    "B008",  # Вызов функций в аргументах по умолчанию (в FastAPI нормально)
+]
+
+# Авто-фикс
+fixable = ["ALL"]
+unfixable = ["B018"]
+
+# Настройка линий
+line-length = 100
+
+# Дополнительные проверки для FastAPI
+[per-file-ignores]
+# Для тестов можно больше исключений
+"tests/**/*.py" = ["S101", "ARG001"]
+"migrations/**/*.py" = ["F401", "F403"]

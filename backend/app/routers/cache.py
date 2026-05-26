@@ -10,7 +10,7 @@ router = APIRouter(prefix="/api/cache", tags=["cache"])
 @router.delete("/{cache_type}")
 async def clear_cache_endpoint(
     cache_type: str,
-    user: User = Depends(get_current_user),
+    user: User = Depends(get_current_user),  # noqa: ARG001
 ):
     if cache_type not in ["all", "summary", "flashcards", "quiz"]:
         raise HTTPException(400, "Invalid cache type")

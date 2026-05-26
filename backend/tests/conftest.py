@@ -32,7 +32,7 @@ async def client():
 
 
 @pytest.fixture
-async def test_user(client):
+async def test_user(client):  # noqa: ARG001
     async with async_session() as db:
         user = User(
             username="testuser",

@@ -61,7 +61,7 @@ async def test_login_wrong_password(client):
 
 
 @pytest.mark.asyncio
-async def test_get_profile(client, test_user, auth_headers):
+async def test_get_profile(client, test_user, auth_headers):  # noqa: ARG001
     response = await client.get("/api/users/me", headers=auth_headers)
     assert response.status_code == 200
     assert response.json()["username"] == "testuser"
@@ -70,4 +70,4 @@ async def test_get_profile(client, test_user, auth_headers):
 @pytest.mark.asyncio
 async def test_unauthorized(client):
     response = await client.get("/api/users/me")
-    assert response.status_code == 403  # No credentials
+    assert response.status_code == 403

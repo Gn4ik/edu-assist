@@ -1,7 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional, List
 
-# Request models
 class SummaryRequest(BaseModel):
     text: Optional[str] = None
     topic: Optional[str] = None
@@ -25,7 +24,6 @@ class PDFExportRequest(BaseModel):
     content: str
     author: str = "Учебный ассистент"
 
-# Response models
 class HealthResponse(BaseModel):
     status: str
     llm: str

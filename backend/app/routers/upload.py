@@ -2,11 +2,9 @@ import asyncio
 import uuid
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dependencies import require_rate_limit
 from app.config import get_settings
-from app.database import get_db
 from app.models.user import User
 from app.schemas.common import UploadResponse
 from app.services.file_service import extract_text_from_file
@@ -19,7 +17,7 @@ router = APIRouter(prefix="/api/upload", tags=["upload"])
 @router.post("/file", response_model=UploadResponse)
 async def upload_file(
     file: UploadFile = File(...),
-    user: User = Depends(require_rate_limit),
+    user: User = Depends(require_rate_limit),  # noqa: ARG001
 ):
     content = await file.read()
     if len(content) > settings.MAX_FILE_SIZE_BYTES:
@@ -45,7 +43,7 @@ async def upload_file(
 @router.post("/batch")
 async def upload_batch(
     files: list[UploadFile] = File(...),
-    user: User = Depends(require_rate_limit),
+    user: User = Depends(require_rate_limit),  # noqa: ARG001
 ):
     if len(files) > 10:
         raise HTTPException(400, "Maximum 10 files per batch")

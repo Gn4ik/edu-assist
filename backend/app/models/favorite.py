@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from sqlalchemy import DateTime, ForeignKey, Integer, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -17,8 +17,8 @@ class Favorite(Base):
         Integer, ForeignKey("generations.id", ondelete="CASCADE"), nullable=False
     )
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+        DateTime(timezone=True), default=lambda: datetime.now(UTC)
     )
 
-    user: Mapped["User"] = relationship(back_populates="favorites")
-    generation: Mapped["Generation"] = relationship(back_populates="favorites")
+    user: Mapped["User"] = relationship(back_populates="favorites")  # noqa: F821
+    generation: Mapped["Generation"] = relationship(back_populates="favorites")  # noqa: F821

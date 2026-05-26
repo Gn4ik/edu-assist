@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from sqlalchemy import Boolean, DateTime, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -16,12 +16,12 @@ class User(Base):
     api_key: Mapped[str | None] = mapped_column(String(64), unique=True, nullable=True)
     settings: Mapped[str | None] = mapped_column(Text, nullable=True)
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
+        DateTime(timezone=True), default=lambda: datetime.now(UTC)
     )
 
-    generations: Mapped[list["Generation"]] = relationship(
+    generations: Mapped[list["Generation"]] = relationship(  # noqa: F821
         back_populates="user", cascade="all, delete-orphan"
     )
-    favorites: Mapped[list["Favorite"]] = relationship(
+    favorites: Mapped[list["Favorite"]] = relationship(  # noqa: F821
         back_populates="user", cascade="all, delete-orphan"
     )

@@ -31,7 +31,6 @@ def _parse_json_output(raw: str):
                 return json.loads(match.group(1))
             except json.JSONDecodeError:
                 pass
-        # Try finding first [ or { to last ] or }
         for start_ch, end_ch in [("[", "]"), ("{", "}")]:
             start = raw.find(start_ch)
             end = raw.rfind(end_ch)

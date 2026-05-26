@@ -1,8 +1,7 @@
-import os
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import Response, JSONResponse
+from fastapi.responses import Response
 
 from app.core.dependencies import get_current_user
 from app.models.user import User
@@ -17,7 +16,7 @@ router = APIRouter(prefix="/api/export", tags=["export"])
 
 
 @router.post("/pdf")
-async def pdf_export(body: ExportRequest, user: User = Depends(get_current_user)):
+async def pdf_export(body: ExportRequest, user: User = Depends(get_current_user)):  # noqa: ARG001
     if not body.content.strip():
         raise HTTPException(400, "Content is empty")
     font_path = str(settings.FONT_DIR / "DejaVuSans.ttf") if (settings.FONT_DIR / "DejaVuSans.ttf").exists() else None
@@ -30,7 +29,7 @@ async def pdf_export(body: ExportRequest, user: User = Depends(get_current_user)
 
 
 @router.post("/markdown")
-async def markdown_export(body: ExportRequest, user: User = Depends(get_current_user)):
+async def markdown_export(body: ExportRequest, user: User = Depends(get_current_user)):  # noqa: ARG001
     if not body.content.strip():
         raise HTTPException(400, "Content is empty")
     md = export_markdown(body.title, body.content)
@@ -42,7 +41,7 @@ async def markdown_export(body: ExportRequest, user: User = Depends(get_current_
 
 
 @router.post("/json")
-async def json_export(body: ExportRequest, user: User = Depends(get_current_user)):
+async def json_export(body: ExportRequest, user: User = Depends(get_current_user)):  # noqa: ARG001
     if not body.content.strip():
         raise HTTPException(400, "Content is empty")
     data = export_json(body.title, body.content, body.author)
@@ -54,7 +53,7 @@ async def json_export(body: ExportRequest, user: User = Depends(get_current_user
 
 
 @router.post("/csv")
-async def csv_export(body: ExportRequest, user: User = Depends(get_current_user)):
+async def csv_export(body: ExportRequest, user: User = Depends(get_current_user)):  # noqa: ARG001
     if not body.content.strip():
         raise HTTPException(400, "Content is empty")
     data = export_csv(body.title, body.content)
@@ -66,7 +65,7 @@ async def csv_export(body: ExportRequest, user: User = Depends(get_current_user)
 
 
 @router.post("/docx")
-async def docx_export(body: ExportRequest, user: User = Depends(get_current_user)):
+async def docx_export(body: ExportRequest, user: User = Depends(get_current_user)):  # noqa: ARG001
     if not body.content.strip():
         raise HTTPException(400, "Content is empty")
     data = export_docx(body.title, body.content, body.author)

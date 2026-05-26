@@ -14,7 +14,7 @@ router = APIRouter(prefix="/api/tasks", tags=["tasks"])
 @router.get("/{task_id}")
 async def stream_task(
     task_id: str,
-    user: User = Depends(get_current_user),
+    user: User = Depends(get_current_user),  # noqa: ARG001
 ):
     async def event_generator():
         while True:

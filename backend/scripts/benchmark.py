@@ -70,7 +70,6 @@ async def main():
 
     print(f"\nResults saved to {OUTPUT_FILE}")
 
-    # Print summary table
     print("\n{:<25} {:<12} {:<10} {:<10}".format("Model", "Prompt", "Time(s)", "Tokens"))
     print("-" * 60)
     for r in results:

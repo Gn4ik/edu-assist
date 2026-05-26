@@ -24,5 +24,5 @@ class Generation(Base):
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), index=True
     )
 
-    user: Mapped["User"] = relationship(back_populates="generations")
-    favorites: Mapped[list["Favorite"]] = relationship(back_populates="generation")
+    user: Mapped["User"] = relationship(back_populates="generations")  # noqa: F821
+    favorites: Mapped[list["Favorite"]] = relationship(back_populates="generation")  # noqa: F821

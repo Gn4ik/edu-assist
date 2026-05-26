@@ -5,7 +5,6 @@ import chardet
 
 
 def extract_from_txt(content: bytes) -> str:
-    # Определяем кодировку
     detected = chardet.detect(content)
     encoding = detected.get("encoding", "utf-8")
     if encoding.lower() == "windows-1252":
