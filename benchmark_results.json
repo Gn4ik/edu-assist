@@ -1,0 +1,65 @@
+[
+  {
+    "model": "llama3.1:latest",
+    "prompt_type": "summary",
+    "time_seconds": 15.66,
+    "tokens_generated": 77,
+    "success": true
+  },
+  {
+    "model": "llama3.1:latest",
+    "prompt_type": "flashcards",
+    "time_seconds": 13.48,
+    "tokens_generated": 100,
+    "success": true
+  },
+  {
+    "model": "llama3.1:latest",
+    "prompt_type": "quiz",
+    "time_seconds": 19.05,
+    "tokens_generated": 128,
+    "success": true
+  },
+  {
+    "model": "llama3.2:3b",
+    "prompt_type": "summary",
+    "time_seconds": 22.2,
+    "tokens_generated": 89,
+    "success": true
+  },
+  {
+    "model": "llama3.2:3b",
+    "prompt_type": "flashcards",
+    "time_seconds": 9.18,
+    "tokens_generated": 105,
+    "success": true
+  },
+  {
+    "model": "llama3.2:3b",
+    "prompt_type": "quiz",
+    "time_seconds": 3.11,
+    "tokens_generated": 115,
+    "success": true
+  },
+  {
+    "model": "lakomoor/vikhr-llama-3.2-1b-instruct:1b",
+    "prompt_type": "summary",
+    "time_seconds": 15.37,
+    "tokens_generated": 214,
+    "success": true
+  },
+  {
+    "model": "lakomoor/vikhr-llama-3.2-1b-instruct:1b",
+    "prompt_type": "flashcards",
+    "time_seconds": 1.95,
+    "tokens_generated": 152,
+    "success": true
+  },
+  {
+    "model": "lakomoor/vikhr-llama-3.2-1b-instruct:1b",
+    "prompt_type": "quiz",
+    "time_seconds": 2.03,
+    "tokens_generated": 121,
+    "success": true
+  }
+]

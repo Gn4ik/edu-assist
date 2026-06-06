@@ -4,11 +4,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.dependencies import require_rate_limit
 from app.database import get_db
 from app.models.user import User
-from app.services.generation_service import generate
 from app.schemas.generation import (
-    SummaryRequest, FlashcardsRequest, QuizRequest,
-    KeywordsRequest, SimplifyRequest, StudyPlanRequest,
+    FlashcardsRequest,
+    KeywordsRequest,
+    QuizRequest,
+    SimplifyRequest,
+    StudyPlanRequest,
+    SummaryRequest,
 )
+from app.services.generation_service import generate
 
 router = APIRouter(prefix="/api/generation", tags=["generation"])
 

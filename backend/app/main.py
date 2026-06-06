@@ -6,11 +6,20 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.config import get_settings
-from app.database import init_db
 from app.core.middleware import LoggingMiddleware
+from app.database import init_db
 from app.routers import (
-    auth, users, generation, history, favorites,
-    export, upload, health, cache, tasks, models,
+    auth,
+    cache,
+    export,
+    favorites,
+    generation,
+    health,
+    history,
+    models,
+    tasks,
+    upload,
+    users,
 )
 
 settings = get_settings()
